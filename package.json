@@ -1,8 +1,8 @@
 {
-  "name": "kuritterweight",
+  "name": "my-app",
   "version": "0.1.0",
   "bin": {
-    "kuritterweight": "bin/kuritterweight.js"
+    "my-app": "bin/my-app.js"
   },
   "scripts": {
     "build": "tsc",
@@ -11,17 +11,23 @@
     "cdk": "cdk"
   },
   "devDependencies": {
+    "@line/bot-sdk": "^9.0.3",
     "@types/jest": "^29.5.12",
     "@types/node": "20.11.19",
+    "aws-cdk": "2.133.0",
     "jest": "^29.7.0",
     "ts-jest": "^29.1.2",
-    "aws-cdk": "2.133.0",
     "ts-node": "^10.9.2",
     "typescript": "~5.3.3"
   },
   "dependencies": {
+    "@aws-cdk/aws-iam": "^1.204.0",
+    "@aws-cdk/aws-lambda": "^1.204.0",
     "aws-cdk-lib": "2.133.0",
+    "aws-sdk": "^2.1579.0",
     "constructs": "^10.0.0",
-    "source-map-support": "^0.5.21"
+    "hono": "^4.1.1",
+    "source-map-support": "^0.5.21",
+    "twitter-api-v2": "^1.16.1"
   }
 }

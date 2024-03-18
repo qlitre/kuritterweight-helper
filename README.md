@@ -1,14 +1,5 @@
-# Welcome to your CDK TypeScript project
+# kuritterweight
 
-This is a blank project for CDK development with TypeScript.
-
-The `cdk.json` file tells the CDK Toolkit how to execute your app.
-
-## Useful commands
-
-* `npm run build`   compile typescript to js
-* `npm run watch`   watch for changes and compile
-* `npm run test`    perform the jest unit tests
-* `npx cdk deploy`  deploy this stack to your default AWS account/region
-* `npx cdk diff`    compare deployed stack with current state
-* `npx cdk synth`   emits the synthesized CloudFormation template
+@kuri_tterが毎朝体重をXにポストするのを補助するプロジェクトです。
+LineBotに当日の体重を入力すると、当日の体重と前日比をXにハッシュタグ付きでポストします。
+データはDynamoDBに保存しています。
