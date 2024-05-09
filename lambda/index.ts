@@ -1,7 +1,6 @@
 import { Hono } from 'hono'
 import { handle } from 'hono/aws-lambda'
 import { DynamoDB } from 'aws-sdk';
-import { TwitterApi } from 'twitter-api-v2';
 
 import {
     MessageAPIResponseBase,
@@ -12,17 +11,6 @@ import {
 
 const app = new Hono()
 const dynamoDb = new DynamoDB.DocumentClient();
-
-// Twitter APIのクライアント設定
-const twitterClient = new TwitterApi({
-    appKey: process.env.TWITTER_API_KEY || '',
-    appSecret: process.env.TWITTER_API_KEY_SECRET || '',
-    accessToken: process.env.TWITTER_ACCESS_TOKEN || '',
-    accessSecret: process.env.TWITTER_ACCESS_TOKEN_SECRET || '',
-});
-
-// 読み書きが可能なクライアントを作成
-const rwClient = twitterClient.readWrite;
 
 app.get('/', (c) => c.text('Hello Hono!'))
 
@@ -71,8 +59,7 @@ const textEventHandler = async (
     let message = "";
     if (!isNaN(curWeight) && userId) {
         const recentWeight = await getLatestWeightFromDynamoDB(userId); // 最新の体重データを取得
-        message = buildTweetMessage(recentWeight, curWeight); // ツイートメッセージの作成
-        await postTweet(`${message}`); // ツイートの投稿
+        message = buildMessage(recentWeight, curWeight); // ツイートメッセージの作成
         await saveWeightToDynamoDB(userId, curWeight); // DynamoDBへの保存
     } else {
         message = "体重データが不正です";
@@ -97,7 +84,7 @@ const textEventHandler = async (
     return
 };
 
-const buildTweetMessage = (recentWeight: number, curWeight: number) => {
+const buildMessage = (recentWeight: number, curWeight: number) => {
     const diff = curWeight - recentWeight;
     let message = `${curWeight}kg`;
     // 小数点第一位まで表示
@@ -141,14 +128,5 @@ const saveWeightToDynamoDB = async (userId: string, weight: number) => {
     await dynamoDb.put(params).promise();
 };
 
-// ツイートを投稿する関数
-const postTweet = async (message: string): Promise<void> => {
-    try {
-        const response = await rwClient.v2.tweet(message);
-        console.log('Tweeted:', response.data);
-    } catch (error) {
-        console.error(error);
-    }
-};
 
 export const handler = handle(app)
